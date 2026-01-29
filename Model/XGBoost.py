@@ -1,21 +1,12 @@
 import pandas as pd
-import shap
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
-
-
-def recommend_crop(input_data, model, feature_names):
-    df = pd.DataFrame([input_data], columns=feature_names)
-    probs = model.predict_proba(df)[0]
-    crops = model.classes_
-    results = sorted(zip(crops, probs), key=lambda x: x[1], reverse=True)
-    return results[:3]
-
+from sklearn.preprocessing import LabelEncoder
+from xgboost import XGBClassifier
 
 # -------------------------------------------------
-# 1. Load NON-augmented synthetic TN dataset
+# 1. Load SOFT-LABEL dataset
 # -------------------------------------------------
 data = pd.read_csv("../data/tn_synthetic_crop_data.csv")
 
@@ -24,25 +15,31 @@ X = data[features]
 y = data["crop"]
 
 # -------------------------------------------------
-# 2. Train–test split (BEFORE augmentation)
+# 2. Encode labels (REQUIRED for XGBoost)
+# -------------------------------------------------
+label_encoder = LabelEncoder()
+y_encoded = label_encoder.fit_transform(y)
+
+# -------------------------------------------------
+# 3. Train-test split (before augmentation)
 # -------------------------------------------------
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y,
+    X, y_encoded,
     test_size=0.2,
-    stratify=y,
+    stratify=y_encoded,
     random_state=42
 )
 
 # -------------------------------------------------
-# 3. Augment ONLY training data
+# 4. Augment ONLY training data
 # -------------------------------------------------
 train_df = X_train.copy()
-train_df["crop"] = y_train.values
+train_df["crop"] = y_train
 
-augmented_rows = []
+augmented = []
 
 for _, row in train_df.iterrows():
-    for _ in range(10):  # augmentation factor
+    for _ in range(10):
         r = row.copy()
         r["Temperature"] += np.random.normal(0, 1.0)
         r["Rainfall"] += np.random.normal(0, 12)
@@ -50,37 +47,39 @@ for _, row in train_df.iterrows():
         r["N"] += np.random.normal(0, 4)
         r["P"] += np.random.normal(0, 2)
         r["K"] += np.random.normal(0, 2)
-        augmented_rows.append(r)
+        augmented.append(r)
 
-aug_train = pd.DataFrame(augmented_rows)
+aug_train = pd.DataFrame(augmented)
 
 X_train_aug = aug_train[features]
 y_train_aug = aug_train["crop"]
 
 # -------------------------------------------------
-# 4. Train model
+# 5. Train XGBoost model
 # -------------------------------------------------
-model = RandomForestClassifier(
-    n_estimators=300,
-    max_depth=18,
-    random_state=42,
-    n_jobs=-1
+model = XGBClassifier(
+    n_estimators=600,
+    max_depth=6,
+    learning_rate=0.05,
+    subsample=0.85,
+    colsample_bytree=0.85,
+    objective="multi:softprob",
+    eval_metric="mlogloss",
+    random_state=42
 )
 
 model.fit(X_train_aug, y_train_aug)
 
 # -------------------------------------------------
-# 5. Evaluate on UNTOUCHED test set
+# 6. Evaluate on unseen test set
 # -------------------------------------------------
 y_pred = model.predict(X_test)
 
 print("Accuracy:", accuracy_score(y_test, y_pred))
-print(classification_report(y_test, y_pred))
-
-# -------------------------------------------------
-# 6. SHAP explainability (use training data)
-# -------------------------------------------------
-explainer = shap.TreeExplainer(model)
-shap_values = explainer.shap_values(X_train_aug)
-
-shap.summary_plot(shap_values, X_train_aug)
+print(
+    classification_report(
+        y_test,
+        y_pred,
+        target_names=label_encoder.classes_
+    )
+)
