@@ -1,4 +1,4 @@
-S_No,District,EC_dS_m,pH,N_Kg_Ha,P_Kg_Ha,K_Kg_Ha,OC_percent,S_ppm,B_ppm,Zn_ppm,Cu_ppm,Fe_ppm,Mn_ppm
+S_No,District,EC_dS_m,pH,N,P,K,OC_percent,S_ppm,B_ppm,Zn_ppm,Cu_ppm,Fe_ppm,Mn_ppm
 1,Kancheepuram,0.2,7.4,188.0,67.0,194.0,0.3,19.0,0.6,0.8,1.0,6.4,3.6
 2,Cuddalore,0.3,7.3,141.5,51.0,237.5,0.3,10.8,0.6,1.1,1.2,5.6,9.0
 3,Villupuram,0.8,7.1,156.0,41.6,233.0,0.4,16.0,0.7,1.5,1.3,5.5,2.5

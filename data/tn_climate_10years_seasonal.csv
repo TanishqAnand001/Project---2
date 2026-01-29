@@ -1,4 +1,4 @@
-District,year,Season,temperature,temperature_max,temperature_min,humidity,rainfall
+District,Year,Season,Temperature,Temperature_max,Temperature_min,Humidity,Rainfall
 Ariyalur,2020,Kharif,29.8,40.5,24.0,64.4,431.0
 Ariyalur,2020,Rabi,26.0,36.8,18.2,75.2,636.0
 Ariyalur,2020,Summer,30.7,41.9,20.9,61.3,64.0

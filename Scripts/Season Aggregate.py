@@ -1,38 +1,41 @@
 import pandas as pd
+import os
 
-# Load 10-year daily climate data
-climate_df = pd.read_csv('../data/tn_climate_10years_daily.csv')
-climate_df['date'] = pd.to_datetime(climate_df['date'])
+project_root = r'C:\Users\acer\PycharmProjects\Project---2'
 
-# Calculate seasonal averages for each year
-seasonal_data = climate_df.groupby(['District', 'year', 'Season']).agg({
-    'temp_mean': 'mean',
-    'temp_max': 'max',
-    'temp_min': 'min',
+# Load your original daily climate data
+daily_climate_path = os.path.join(project_root, 'data', 'tn_climate_10years_daily.csv')
+daily_df = pd.read_csv(daily_climate_path)
+
+# Convert date to datetime
+daily_df['date'] = pd.to_datetime(daily_df['date'])
+
+# Extract year and month
+daily_df['year'] = daily_df['date'].dt.year
+daily_df['month'] = daily_df['date'].dt.month
+
+# Monthly aggregation
+monthly_df = daily_df.groupby(['District', 'year', 'month']).agg({
+    'temperature': 'mean',
+    'temperature_max': 'max',
+    'temperature_min': 'min',
     'humidity': 'mean',
-    'rainfall': 'sum'
+    'rainfall': 'sum',  # Total monthly rainfall
+    'wind_speed': 'mean'
 }).reset_index()
 
-seasonal_data.rename(columns={
-    'temp_mean': 'temperature',
-    'temp_max': 'temperature_max',
-    'temp_min': 'temperature_min',
-    'humidity': 'humidity',
-    'rainfall': 'rainfall'
-}, inplace=True)
+# Add month name for readability
+month_names = {
+    1: 'January', 2: 'February', 3: 'March', 4: 'April',
+    5: 'May', 6: 'June', 7: 'July', 8: 'August',
+    9: 'September', 10: 'October', 11: 'November', 12: 'December'
+}
+monthly_df['month_name'] = monthly_df['month'].map(month_names)
 
-# Round values
-seasonal_data['temperature'] = seasonal_data['temperature'].round(1)
-seasonal_data['temperature_max'] = seasonal_data['temperature_max'].round(1)
-seasonal_data['temperature_min'] = seasonal_data['temperature_min'].round(1)
-seasonal_data['humidity'] = seasonal_data['humidity'].round(1)
-seasonal_data['rainfall'] = seasonal_data['rainfall'].round(0)
+# Save monthly climate data
+output_path = os.path.join(project_root, 'data', 'tn_climate_monthly.csv')
+monthly_df.to_csv(output_path, index=False)
 
-# Save
-seasonal_data.to_csv('../data/tn_climate_10years_seasonal.csv', index=False)
-
-print(f"✅ Seasonal aggregates created!")
-print(f"Total rows: {len(seasonal_data)}")
-print(f"Districts: {seasonal_data['District'].nunique()}")
-print(f"Years: {seasonal_data['year'].min()} - {seasonal_data['year'].max()}")
-print(f"\nSample:\n{seasonal_data.head(10)}")
+print(f"✅ Monthly climate data created!")
+print(f"Total monthly records: {len(monthly_df)}")
+print(f"\nSample:\n{monthly_df.head()}")
