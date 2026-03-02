@@ -16,7 +16,7 @@ def convert_xlsx_to_csv(xlsx_path: str, output_dir: str = None, encoding: str = 
     Returns:
         List of paths to the generated CSV files.
     """
-    xlsx_path = Path(xlsx_path).resolve()
+    xlsx_path = str(Path(xlsx_path).resolve())
     if not xlsx_path.exists():
         raise FileNotFoundError(f"File not found: {xlsx_path}")
 
@@ -37,7 +37,7 @@ def convert_xlsx_to_csv(xlsx_path: str, output_dir: str = None, encoding: str = 
             safe_sheet = sheet.replace("/", "-").replace("\\", "-").replace(":", "-")
             csv_name = f"{xlsx_path.stem}_{safe_sheet}.csv"
 
-        csv_path = output_dir / csv_name
+        csv_path = Path(output_dir) / csv_name
         df.to_csv(csv_path, index=False, encoding=encoding)
         generated.append(str(csv_path))
         print(f"  ✔  {xlsx_path.name}  →  Sheet '{sheet}'  →  {csv_path}")
