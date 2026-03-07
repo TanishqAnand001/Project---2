@@ -1,0 +1,67 @@
+Variety,Cultivation Type,Primary Season,Sowing Window,Duration (Days),N,P,K,pH_Low,pH_High,EC,OC(%),S,Fe,Zn,Cu,B,Mn
+Ponmani (CR 1009),Wet Direct Sown,Samba,1st - 30th August,160,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 43,Wet Direct Sown,Thaladi,1st - 30th September,125,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+IR 20,Wet Direct Sown,Thaladi,1st - 30th September,125,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 38,Wet Direct Sown,Thaladi,1st - 30th September,125,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 39,Wet Direct Sown,Thaladi,1st - 30th September,125,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+Ponni,Wet Direct Sown,Thaladi,1st - 30th September,125,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+Improved White Ponni,Wet Direct Sown,Thaladi,1st - 30th September,125,75,50,50,6.0,7.0,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 43,Wet Direct Sown,Kuruvai,1st-10th June,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 43,Wet Direct Sown,Late Thaladi,1st-10th October,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 45,Wet Direct Sown,Kuruvai,1st-10th June,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 45,Wet Direct Sown,Late Thaladi,1st-10th October,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 53,Wet Direct Sown,Kuruvai,1st-10th June,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 53,Wet Direct Sown,Late Thaladi,1st-10th October,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 51,Wet Direct Sown,Kuruvai,1st-10th June,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 51,Wet Direct Sown,Late Thaladi,1st-10th October,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 54,Wet Direct Sown,Kuruvai,1st-10th June,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 54,Wet Direct Sown,Late Thaladi,1st-10th October,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 55,Wet Direct Sown,Kuruvai,1st-10th June,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 55,Wet Direct Sown,Late Thaladi,1st-10th October,105,125,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 36,Transplanted,Kuruvai,June-July,110,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 36,Transplanted,Navarai,Dec-Jan,110,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 37,Transplanted,Kuruvai,June-July,105,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 37,Transplanted,Navarai,Dec-Jan,105,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 55,Transplanted,Kuruvai,June-July,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 55,Transplanted,Navarai,Dec-Jan,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 56,Transplanted,Kuruvai,June-July,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 56,Transplanted,Navarai,Dec-Jan,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 57,Transplanted,Kuruvai,June-July,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 57,Transplanted,Navarai,Dec-Jan,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TPS 5,Transplanted,Kuruvai,June-July,118,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TPS 5,Transplanted,Navarai,Dec-Jan,118,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+MDU 6,Transplanted,Kuruvai,June-July,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+MDU 6,Transplanted,Navarai,Dec-Jan,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ASD 16,Transplanted,Kuruvai,June-July,110,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ASD 16,Transplanted,Navarai,Dec-Jan,110,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ASD 21,Transplanted,Kuruvai,June-July,110,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ASD 21,Transplanted,Navarai,Dec-Jan,110,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TRY 5,Transplanted,Kuruvai,June-July,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TRY 5,Transplanted,Navarai,Dec-Jan,115,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 51,Transplanted,Samba,August,155,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 52,Transplanted,Samba,August,150,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CR 1009 Sub 1,Transplanted,Samba,August,155,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TRY 3,Transplanted,Samba,August,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TRY 3,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 46,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 46,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 54,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 54,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 58,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+ADT 58,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 43 Sub1,Transplanted,Late Samba,Sep-Oct,140,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 43 Sub1,Transplanted,Thaladi,Sep-Oct,140,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 50,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 50,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 52,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 52,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 56,Transplanted,Late Samba,Sep-Oct,130,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 56,Transplanted,Thaladi,Sep-Oct,130,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 57,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CO 57,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TKM 13,Transplanted,Late Samba,Sep-Oct,130,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TKM 13,Transplanted,Thaladi,Sep-Oct,130,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TRY 4,Transplanted,Late Samba,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+TRY 4,Transplanted,Thaladi,Sep-Oct,135,150,50,50,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CORH 4,Transplanted,Late Samba,Sep-Oct,135,175,60,60,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
+CORH 4,Transplanted,Thaladi,Sep-Oct,135,175,60,60,6.0,7.5,<1.0,>0.5,20,12.5,25,1.0,0.5,5.0
