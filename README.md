@@ -1,218 +1,178 @@
-# Smart Agriculture Data Pipeline and Regional Analytics
+# Thanjavur Crop Recommendation - Model-Centric README
 
-This project builds a district-level agriculture intelligence pipeline for Tamil Nadu by combining:
+This project is a machine learning system for ranking crops using agro-climatic suitability and market-aware signals, with a primary focus on Thanjavur district.
 
-- Soil health data (district and block level)
-- Crop market price and yield datasets
-- Weather summaries derived from Open-Meteo historical APIs
+The main modeling workflow lives in `Main Model.ipynb`.
 
-The repository contains data cleaning utilities, consolidation scripts, weather data extraction, and a detailed regional analysis workflow (currently focused on Thanjavur district).
+## Modeling goal
 
-## What this project does
+Build a binary classifier that predicts whether a crop transaction is high-performing (`1`) or lower-performing (`0`), then use model probabilities plus historical productivity and profit proxies to generate practical crop rankings.
 
-1. Converts raw Excel soil datasets to CSV format.
-2. Merges fragmented crop CSV files into consolidated crop-level files.
-3. Replaces split crop files with clean consolidated versions.
-4. Extracts and summarizes weather signals for each district block.
-5. Performs district-level analytics (soil + crop price insights) and generates visual reports.
+## End-to-end ML flow
 
-## Tech stack
+The notebook follows a production-style sequence:
 
-- Python 3.10+
-- pandas, numpy
-- matplotlib, seaborn
-- scikit-learn (available for downstream modeling)
-- streamlit (available for dashboard/app extensions)
-- requests (used in weather collection script)
+1. Imports and setup
+2. Data loading and preprocessing
+3. Feature engineering
+4. Stratified train/test split
+5. Multi-model training with multiple feature sets
+6. Holdout and cross-validation evaluation
+7. Ensemble-based crop ranking and recommendation
 
-Dependencies are listed in `requirements.txt`.
+## Data used by the models
 
-## Repository structure
+The model combines four feature domains:
 
-```text
-Project---2/
-|-- Data/
-|   |-- 3_Cleaned CSVs/
-|   |   |-- Consolidated/
-|   |-- Crop Area And Yield Data.csv
-|   |-- crop_requirements.csv
-|   |-- Crop Data/
-|   |-- Soil Data ( District Wise)/
-|   |   |-- CSV Format/
-|   |   |-- Excel Format/
-|   |-- Weather Data (District Wise)/
-|       |-- weather_data_all_blocks.csv
-|       |-- Raw Daily/
-|-- Scripts/
-|   |-- Excel To CSV.py
-|   |-- Combine CSV.py
-|   |-- ReplaceWithConsolidated.py
-|   |-- Weather Data Collection.py
-|   |-- Region Analysis.py
-|-- Models/
-|-- requirements.txt
-|-- Untitled-2.ipynb
-```
+- Soil profile features
+  - N/P/K status, pH, EC salinity, organic carbon indicators
+- Weather summary features
+  - temperature, rainfall, humidity, rainy days, wind
+- Crop requirement features
+  - N/P/K requirement levels plus rainfall and temperature requirements
+- Historical productivity features
+  - area median, yield median, yield-per-area
 
-## Data folders explained
+Primary source files:
 
-- `Data/Soil Data ( District Wise)/Excel Format/`
-  - Original Excel sources for soil metrics.
-- `Data/Soil Data ( District Wise)/CSV Format/`
-  - District-wise soil CSV files used by analysis and weather scripts.
-- `Data/3_Cleaned CSVs/`
-  - Crop market/price data after cleaning.
-  - Contains both split files (with year suffixes) and single crop files.
-- `Data/3_Cleaned CSVs/Consolidated/`
-  - Output from consolidation scripts.
-- `Data/Weather Data (District Wise)/Raw Daily/`
-  - Per-block daily weather time series files.
+- `Data/Soil Data ( District Wise)/CSV Format/THANJAVUR.csv`
 - `Data/Weather Data (District Wise)/weather_data_all_blocks.csv`
-  - Final block-level summarized weather features.
+- `Data/3_Cleaned CSVs/*.csv`
+- `Data/crop_requirements.csv`
+- `Data/Crop Area And Yield Data.csv`
 
-## Scripts and workflow
+## Target construction
 
-### 1) Excel to CSV conversion
-File: `Scripts/Excel To CSV.py`
+This is not trained directly on a labeled success column from raw data. Instead, the notebook builds a target proxy:
 
-Purpose:
-- Converts one or many `.xlsx` files to `.csv`.
-- Handles multi-sheet workbooks by exporting one CSV per sheet.
+- Revenue proxy per transaction = modal market price x historical crop yield
+- High-performing class = top quartile (>= 75th percentile) of the proxy
+- Lower-performing class = remaining transactions
 
-Modes:
-- Single Excel file
-- Folder batch conversion
-- Project data-target mode (preconfigured option in script)
+Important design choice:
 
-Typical run:
+- Price is excluded from model input features to avoid leakage and overweighting of market price in suitability learning.
 
-```powershell
-python "Scripts/Excel To CSV.py"
-```
+## Feature sets evaluated
 
-### 2) Consolidate split crop files
-File: `Scripts/Combine CSV.py`
+The notebook trains each model family on three feature bundles:
 
-Purpose:
-- Detects crop files split by year ranges (for example, `Paddy-2015-2019.csv`, `Paddy-2019-2022.csv`).
-- Merges and deduplicates records.
-- Writes consolidated outputs into `Data/3_Cleaned CSVs/Consolidated/`.
+- `soil_weather`
+- `soil_weather_requirements`
+- `soil_weather_req_area_yield`
 
-Typical run:
+The third feature set is the richest and generally performs best in saved outputs.
 
-```powershell
-python "Scripts/Combine CSV.py"
-```
+## Model families trained
 
-### 3) Replace fragmented files with consolidated versions
-File: `Scripts/ReplaceWithConsolidated.py`
+Core models:
 
-Purpose:
-- Copies consolidated files back into `Data/3_Cleaned CSVs/`.
-- Deletes old fragmented files with year-suffix naming patterns.
+- RandomForestClassifier
+- GradientBoostingClassifier
+- LogisticRegression
+- SVC (RBF, probability enabled)
 
-Typical run:
+Optional boosted models (trained when libraries are installed):
 
-```powershell
-python "Scripts/ReplaceWithConsolidated.py"
-```
+- CatBoostClassifier
+- XGBClassifier
+- LGBMClassifier
 
-### 4) Weather data extraction and aggregation
-File: `Scripts/Weather Data Collection.py`
+Graceful fallback behavior:
 
-Purpose:
-- Reads unique `(District, Block)` combinations from soil CSV files.
-- Geocodes blocks with Nominatim (OpenStreetMap).
-- Calls Open-Meteo historical APIs to fetch daily weather and hourly soil variables.
-- Computes summarized agro-climate indicators.
-- Saves:
-  - Raw daily files per block in `Data/Weather Data (District Wise)/Raw Daily/`
-  - Consolidated summary in `Data/Weather Data (District Wise)/weather_data_all_blocks.csv`
+- If CatBoost/XGBoost/LightGBM is missing, the notebook skips that block without stopping the entire training flow.
 
-Notes:
-- The script includes intentional waiting between API calls to reduce rate-limit risk.
-- Internet access is required.
+## Training and validation strategy
 
-Typical run:
+- Train/test split: stratified random 80/20
+- Class imbalance handling:
+  - balanced class weights for eligible models
+  - scale-pos-weight style balancing for boosting models
+- Cross-validation:
+  - 5-fold StratifiedKFold on training data
+  - includes optional row cap for large datasets
+- Metrics tracked per experiment:
+  - Accuracy
+  - F1
+  - PR-AUC (primary ranking metric)
+  - ROC-AUC
 
-```powershell
-python "Scripts/Weather Data Collection.py"
-```
+Model selection policy:
 
-### 5) Regional analysis (Thanjavur focus)
-File: `Scripts/Region Analysis.py`
+- Leaderboard sorted primarily by holdout PR-AUC, then F1, then Accuracy.
 
-Purpose:
-- Loads Thanjavur soil profile from district soil data.
-- Filters crop price files for Thanjavur records.
-- Computes nutrient, pH, micronutrient, and crop-price insights.
-- Generates visualization PNGs in the project root:
-  - `soil_macronutrients.png`
-  - `soil_pH_distribution.png`
-  - `soil_micronutrients.png`
-  - `soil_block_comparison.png`
-  - `crop_prices_comparison.png`
-  - `crop_records_count.png`
+## Current observed model behavior
 
-Typical run:
+From the saved notebook outputs/plots:
 
-```powershell
-python "Scripts/Region Analysis.py"
-```
+- Top experiments cluster around PR-AUC of approximately 0.80 to 0.84.
+- Best-performing runs are primarily from:
+  - `soil_weather_req_area_yield` feature set
+  - Tree/boosting families (RandomForest, XGBoost, GradientBoosting, CatBoost, LightGBM)
+- LogisticRegression and SVM remain competitive but generally rank lower than boosted/tree ensembles.
 
-## Setup instructions
+## Ensemble and recommendation logic
 
-### 1) Create and activate virtual environment
+After training, the notebook creates an ensemble from the best variant of each trained model family.
+
+It then produces three separate rankings:
+
+1. High-performance probability
+   - ensemble probability using non-price model features
+2. Yield potential rank
+   - historical productivity score
+3. Profit proxy rank
+   - market opportunity from price x yield
+
+This separation keeps agronomic suitability and market profitability interpretable as distinct objectives.
+
+## Artifacts and outputs
+
+- Notebook with full ML pipeline:
+  - `Main Model.ipynb`
+- CatBoost training artifacts:
+  - `catboost_info/catboost_training.json`
+  - `catboost_info/learn_error.tsv`
+  - `catboost_info/time_left.tsv`
+
+Generated during notebook execution:
+
+- Experiment leaderboard tables
+- Top-experiments PR-AUC bar charts
+- Classification report for the best pipeline
+- Crop-level ranking tables for performance, yield, and profit proxy
+
+## Environment setup
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
-
-### 2) Install dependencies
-
-```powershell
 pip install -r requirements.txt
-pip install requests
+pip install catboost xgboost lightgbm requests
 ```
 
-`requests` is used by weather collection and may need to be added to `requirements.txt` if missing.
+Notes:
 
-## Recommended execution order
+- `catboost`, `xgboost`, and `lightgbm` are optional but recommended for full model comparison.
+- If optional libraries are not installed, the notebook still runs using available models.
 
-1. Convert Excel files to CSV (if new Excel data is added).
-2. Consolidate split crop files.
-3. Replace fragmented files with consolidated files.
-4. Collect weather data and generate weather summary table.
-5. Run district analysis to produce insights and plots.
+## How to run the model workflow
 
-## Current outputs
+1. Open `Main Model.ipynb`.
+2. Run cells top to bottom.
+3. Review the leaderboard and cross-validation summary.
+4. Use the final prediction section to inspect ranked crop recommendations.
 
-- Consolidated crop CSV files under `Data/3_Cleaned CSVs/Consolidated/`
-- Cleaned crop CSV set in `Data/3_Cleaned CSVs/`
-- Weather summary table: `Data/Weather Data (District Wise)/weather_data_all_blocks.csv`
-- Per-block weather histories: `Data/Weather Data (District Wise)/Raw Daily/`
-- Thanjavur analysis plots in project root
+## Limitations
 
-## Known limitations
+- Current modeling scope is centered on Thanjavur-driven workflow.
+- Target is a proxy label (derived), not a direct ground-truth agronomic outcome label.
+- Some paths in notebook cells are absolute Windows paths and may need path normalization.
 
-- Some scripts use absolute Windows paths; portability may be limited across machines.
-- Current regional analytics are centered on Thanjavur and can be generalized for other districts.
-- `Models/` is currently empty (model training pipeline can be added next).
-- `Untitled-2.ipynb` exists for experimentation but is not yet documented as a production workflow.
+## Next model improvements
 
-## Suggested next improvements
-
-- Add CLI arguments to all scripts (`argparse`) to avoid hard-coded paths.
-- Add logging and validation checks for missing columns/files.
-- Add model training and evaluation scripts inside `Models/`.
-- Add a Streamlit dashboard to visualize district trends interactively.
-- Add tests for data transformation utilities.
-
-## License
-
-No explicit license file is currently present. Add a `LICENSE` file if this project will be shared publicly.
-
-## Author notes
-
-This repository already has a strong data engineering base for an agriculture intelligence platform. The next milestone can be a full prediction workflow (for yield, price, or crop suitability) using the prepared soil-weather-market feature sets.
+- Add calibrated probabilities (`CalibratedClassifierCV`) for better decision thresholds.
+- Add time-aware validation to test temporal robustness.
+- Add SHAP-based feature attribution for explainability.
+- Export best pipelines (`joblib`) for reuse in an API or dashboard.
+- Track experiments with a formal registry (MLflow or similar).
